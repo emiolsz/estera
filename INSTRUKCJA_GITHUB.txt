@@ -1,0 +1,17 @@
+PRACOWNIA ESTERY — SENNIK I JĘZYK ANIOŁÓW
+
+1. Rozpakuj ZIP.
+2. Utwórz osobne repozytorium GitHub dla tej strony.
+3. Wgraj zawartość rozpakowanego katalogu, a nie sam plik ZIP.
+4. Nie nadpisuj repozytorium Soul Decodera.
+
+Paczka zawiera kod strony i trzy ilustracje. Twoje dwie nowe grafiki
+wstawiono bez kadrowania i bez przerabiania.
+
+Jest to kod wersji działającej w Sites / Cloudflare Workers.
+Sam GitHub przechowuje kod. Do działania dziennika potrzebna jest baza D1
+oraz logowanie. Ta paczka nie jest wdrożeniem Vercel ani statyczną stroną HTML.
+
+Interpretacje AI i wysyłka e-mail wymagają osobnego podłączenia.
+W paczce nie ma kluczy API, haseł ani zapisanych snów.
+Dalsza konfiguracja znajduje się w README.md.

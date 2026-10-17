@@ -1,0 +1,11 @@
+1. Pobierz ZIP na komputer.
+2. Kliknij plik prawym przyciskiem i wybierz Wyodrebnij wszystkie.
+3. Otworz wypakowany folder Pracownia_Estery.
+4. Na GitHubie otworz osobne repozytorium tej strony.
+5. Wybierz Add file, potem Upload files.
+6. Przeciagnij zawartosc folderu (pliki i podfoldery), nie sam ZIP.
+7. Zapisz przez Commit changes.
+
+Nie nadpisuj repozytorium Soul Decodera.
+Kod wymaga Sites / Cloudflare; sam GitHub go nie uruchamia.
+AI i poczta nadal wymagaja konfiguracji.
