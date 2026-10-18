@@ -1,47 +1,47 @@
-# Pracownia Estery — sny i synchroniczność
+# Pracownia Estery — Vercel / Next.js
 
-Osobny projekt. Nie zmienia Soul Decodera. Zachowuje jego logo, grafikę Kodu Duszy, czcionki i kolorystykę. Kafelki Sennik i Język aniołów zawierają oryginalne ilustracje użytkowniczki.
+Strona z trzema kafelkami, bezpłatnym sennikiem, językiem aniołów, czytelnią i dziennikiem snów. Kod Duszy prowadzi na https://soul-decoder-estera.vercel.app/.
 
-## Przygotowane funkcje
+## Publikacja na Vercelu
 
-- Trzy kafelki: Interpretator snu, Synchroniczność / język aniołów, Kod Duszy (link do obecnej aplikacji).
-- Jednorazowa interpretacja bez zapisu; zalogowany użytkownik może zapisywać sny w D1 i wybrać do 10 własnych wpisów jako kontekst.
-- Dziennik jest filtrowany według zaufanego identyfikatora użytkownika z Sites. Nie polega na lokalnej pamięci przeglądarki. Wpisy można usuwać i eksportować jako JSON lub PDF.
-- Eksport PDF obsługuje polskie znaki. Wysyłka PDF tylko na zweryfikowany adres zalogowanego użytkownika, po potwierdzeniu.
-- Czytelnia z tytułami i podtytułami, pełne treści po rozwinięciu. W administracji szkic i publikacja są oddzielone.
-- Prywatna publikacja do oceny. Uruchomienie anonimowego dostępu wymaga świadomej zmiany dostępności strony.
+Repozytorium: `emiolsz/estera`, gałąź `main`, Root Directory: katalog główny (puste pole), Framework: **Next.js**. Konfiguracja `vercel.json` ustawia instalację `npm ci`, budowanie `npm run build` i wynik `.next`. Usuń wcześniejsze ręczne nadpisania poleceń instalacji/budowania lub Output Directory w ustawieniach projektu. Nie ustawiaj `dist` ani `vinext build`.
 
-## Konfiguracja przed uruchomieniem AI i wysyłki
+Bez kluczy strona może się skompilować i pokazać kafelki, formularz snu oraz pobieranie PDF z wpisaną treścią. To nie oznacza jeszcze uruchomienia AI, poczty ani dziennika.
 
-Sekrety wyłącznie w ustawieniach runtime Sites, nigdy w źródłach ani w przeglądarce:
+## Logowanie i baza — Supabase
 
-- `OPENAI_API_KEY`: wymagane podłączenie OpenAI Developers i zatwierdzenie klucza zgodnie z instrukcją tej integracji. Nie wpisywać klucza w czacie.
-- `OPENAI_MODEL`: opcjonalnie; domyślnie `gpt-4.1-mini`. Model musi być dostępny dla danego konta API.
-- `RESEND_API_KEY` i `MAIL_FROM`: wysyłka przez API Resend z zatwierdzonego adresu/domeny nadawcy. Nie skonfigurowano konta ani nie wysłano testowego maila.
-- `ADMIN_EMAIL`: adres konta ChatGPT administratorki. Nie zgadywać; przypisać właściwe konto przed redakcją czytelni.
+Można wykorzystać istniejący projekt Supabase. W SQL Editor uruchom jednorazowo `supabase/migrations/202610180001_estera.sql`. Tabele `estera_*` nie zmieniają tabel Soul Decodera. Dane z prywatnego podglądu Sites nie są automatycznie migrowane.
 
-Brak kluczy nie powoduje pozorowanych interpretacji ani fałszywego potwierdzenia wysyłki. Dziennik i eksport PDF działają niezależnie od AI. Treści z interpretacji generuje model po wyraźnym kliknięciu i zgodzie. `store:false` wyłącza utrwalanie obiektu odpowiedzi w Responses API; nie jest to obietnica całkowitego braku retencji po stronie dostawcy.
+Dodaj w Vercel > Settings > Environment Variables:
 
-Limity: 3 interpretacje dziennie dla anonimowego korzystania, 20 dla konta, 200 łącznie; 10 wiadomości dziennie na konto. Użytkownik korzysta bezpłatnie, ale API może generować koszty właścicielki. To limity startowe do uzgodnienia.
+- `SUPABASE_URL` — adres projektu Supabase.
+- `SUPABASE_ANON_KEY` — klucz anon/publishable projektu.
+- `SUPABASE_SERVICE_ROLE_KEY` — klucz serwerowy service_role. Nigdy nie dodawaj prefiksu `NEXT_PUBLIC_` i nie umieszczaj go w repozytorium.
+- `ADMIN_EMAIL` — adres właścicielki uprawnionej do redakcji czytelni.
 
-## Przed publiczną premierą
+W Supabase włącz logowanie e-mailem i skonfiguruj SMTP. W szablonie wiadomości logowania (Magic Link) musi być widoczny kod `{{ .Token }}` — formularz na stronie przyjmuje kod, a nie wymaga kliknięcia linku. Osoby korzystające z dziennika tworzą konto przez potwierdzenie adresu e-mail; nie ma newslettera ani subskrypcji.
 
-Uzupełnić grafiki, regulamin i politykę prywatności dopasowaną do rzeczywistych dostawców i przekazywania snów do AI. Sprawdzić właścicielkę administratora, działanie logowania, izolację dwóch kont, rzeczywistą interpretację i dostarczenie e-maila. Nie kopiować bazy, klientów, sekretów, płatności ani interpretacji Soul Decodera.
+Sesja działa w ciasteczkach HttpOnly, Secure w produkcji, SameSite=Lax. Serwer weryfikuje konto w Supabase. Nie ufa nagłówkom tożsamości ChatGPT. Dostęp do snów zawęża do identyfikatora zalogowanej osoby; redakcja wymaga ADMIN_EMAIL. Tabele mają RLS i odebrane uprawnienia anon/authenticated; dostęp przez sprawdzający uprawnienia serwer.
 
-## Walidacja
+## Interpretacje i poczta
 
-`node node_modules/typescript/bin/tsc --noEmit`
+- `OPENAI_API_KEY` — klucz API OpenAI; `OPENAI_MODEL` opcjonalnie (domyślnie `gpt-4.1-mini`). Potrzebna jest także skonfigurowana baza do trwałych limitów użycia.
+- `RESEND_API_KEY` — klucz Resend; `MAIL_FROM` — zatwierdzony adres nadawcy w Resend. PDF wysyłany jest wyłącznie na potwierdzony adres zalogowanej osoby. Mail zawiera odnośnik do Soul Decodera.
 
-`node /root/.codex/plugins/cache/openai-curated-remote/sites/1.0.2-remix-a.1/scripts/build-site.mjs`
+Nie udostępniaj kluczy w czacie ani w plikach GitHuba. Po zmianie zmiennych wykonaj Redeploy.
 
-Przy braku narzędzia control-browser nie uruchamiano lokalnego serwera podglądu ani testów przeglądarkowych. Weryfikacja budowania nie potwierdza podłączenia OpenAI, dostarczenia e-maila ani zachowania dwóch różnych kont.
+Limity startowe: 3 interpretacje/dzień bez logowania, 20 dla zalogowanego konta, 200 dla całej strony, 10 wysyłek PDF na konto/dzień, 500 snów na konto. Limity przechowywane są w bazie, nie w pamięci pojedynczej funkcji. Żadne wiadomości testowe nie są automatycznie wysyłane podczas kompilacji.
 
-## Paczka do GitHuba
+## Sprawdzenie po wdrożeniu
 
-Rozpakuj ZIP i wgraj jego zawartość do osobnego repozytorium. Nie nadpisuj repozytorium Soul Decodera. Paczka zawiera źródła i ilustracje, bez sekretów, bazy użytkowników i node_modules.
+1. Otwórz stronę, sprawdź trzy grafiki i link Kodu Duszy.
+2. Wpisz sen i pobierz PDF (bez konta i kluczy AI).
+3. Po skonfigurowaniu Supabase potwierdź kod e-mail, zapisz sen, wyloguj się i sprawdź dostęp z drugiego konta.
+4. Po dodaniu klucza AI wygeneruj interpretację; po skonfigurowaniu Resend wyślij PDF.
+5. Z konta ADMIN_EMAIL sprawdź szkic i publikację artykułu. Zapis szkicu po publikacji zachowuje poprzednią opublikowaną treść.
 
-To aplikacja Vinext / Cloudflare Workers z bazą D1 i logowaniem Sites. Zapisanie kodu w GitHubie nie podłącza AI, poczty ani bazy. Repozytorium nie jest gotowym wdrożeniem Vercel ani pojedynczym statycznym HTML-em. Działająca prywatna wersja jest dostępna pod adresem https://pracownia-estery-sny.idealkid512.chatgpt.site.
+## Lokalnie
 
-Plik .openai/hosting.json wskazuje istniejącą stronę i wiązanie D1. Nie zawiera hasła ani klucza. Baza dziennika nie jest częścią archiwum; swoje sny eksportuje się osobno z aplikacji. Integracje AI i poczty wymagają konfiguracji opisanej wyżej.
+Node.js 22, `npm ci`, `npm run build`, `npm start`. Plik `.env.example` zawiera same nazwy ustawień, bez kluczy.
 
-Bezpłatny eksport wpisanego snu: w formularzu przycisk „Pobierz wpisany sen jako PDF” działa bez AI, newslettera, zgody marketingowej, adresu e-mail i konta dziennika. Zawiera datę, tytuł, wpisaną treść i ewentualną dostępną interpretację. Strona jest na razie prywatna do oceny właścicielki.
+Przed publicznym uruchomieniem usług uzupełnij informacje o administratorze danych, prywatności i usługach zewnętrznych oraz sprawdź pocztę i przepływ AI z prawdziwą konfiguracją.
