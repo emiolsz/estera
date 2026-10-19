@@ -25,7 +25,9 @@ Sesja działa w ciasteczkach HttpOnly, Secure w produkcji, SameSite=Lax. Serwer 
 
 ## Interpretacje i poczta
 
-- `OPENAI_API_KEY` — klucz API OpenAI; `OPENAI_MODEL` opcjonalnie (domyślnie `gpt-4.1-mini`). Potrzebna jest także skonfigurowana baza do trwałych limitów użycia.
+- `GEMINI_API_KEY` — klucz Google AI Studio. Domyślny model: `gemini-3.8-flash`; opcjonalne nadpisanie przez `GEMINI_MODEL`. Gdy dodano oba klucze AI, domyślnie używany jest Gemini. `AI_PROVIDER=google` lub `openai` wybiera dostawcę jawnie. Treść snu jest wysyłana do wybranego dostawcy dopiero po zaznaczeniu zgody.
+- `OPENAI_API_KEY` — alternatywny klucz API OpenAI; `OPENAI_MODEL` opcjonalnie (domyślnie `gpt-4.1-mini`). Potrzebna jest także skonfigurowana baza do trwałych limitów użycia.
+- `BREVO_API_KEY` — alternatywnie klucz API Brevo (**nie klucz SMTP**). `MAIL_FROM` to zatwierdzony adres nadawcy. Brevo ma pierwszeństwo, gdy podano oba klucze pocztowe; można wybrać `MAIL_PROVIDER=brevo` lub `resend`.
 - `RESEND_API_KEY` — klucz Resend; `MAIL_FROM` — zatwierdzony adres nadawcy w Resend. PDF wysyłany jest wyłącznie na potwierdzony adres zalogowanej osoby. Mail zawiera odnośnik do Soul Decodera.
 
 Nie udostępniaj kluczy w czacie ani w plikach GitHuba. Po zmianie zmiennych wykonaj Redeploy.
@@ -37,7 +39,7 @@ Limity startowe: 3 interpretacje/dzień bez logowania, 20 dla zalogowanego konta
 1. Otwórz stronę, sprawdź trzy grafiki i link Kodu Duszy.
 2. Wpisz sen i pobierz PDF (bez konta i kluczy AI).
 3. Po skonfigurowaniu Supabase potwierdź kod e-mail, zapisz sen, wyloguj się i sprawdź dostęp z drugiego konta.
-4. Po dodaniu klucza AI wygeneruj interpretację; po skonfigurowaniu Resend wyślij PDF.
+4. Po dodaniu klucza Gemini lub OpenAI wygeneruj interpretację; po skonfigurowaniu Brevo lub Resend wyślij PDF. Można również wysłać sam wpisany sen przed wygenerowaniem interpretacji.
 5. Z konta ADMIN_EMAIL sprawdź szkic i publikację artykułu. Zapis szkicu po publikacji zachowuje poprzednią opublikowaną treść.
 
 ## Lokalnie
