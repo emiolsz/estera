@@ -5,6 +5,6 @@
 /* Visible feedback while a dream interpretation is being generated. */
 .button.primary.interpreting:disabled{background:#674582;color:#fff;border-color:#674582;opacity:1;cursor:progress}
 .interpretation-progress{padding:1rem;border-left:4px solid #674582;background:#f1eaf7;color:#48305d}
-#dream-interpretation{scroll-margin-top:2rem}
+#dream-interpretation,#numbers-interpretation{scroll-margin-top:2rem}
 
-#dream-interpretation{border:1px solid #d8c7aa;border-radius:12px;padding:1.25rem;margin-top:1.5rem;min-height:160px;background:#fdfbf7}
+#dream-interpretation,#numbers-interpretation{border:1px solid #d8c7aa;border-radius:12px;padding:1.25rem;margin-top:1.5rem;min-height:160px;background:#fdfbf7}
